@@ -1,0 +1,122 @@
+openapi: 3.0.0
+info:
+  title: Product Manager API
+  description: API for managing products in a store
+  version: 1.0.0
+paths:
+  /products:
+    get:
+      summary: Get all products
+      description: Returns a list of all products
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+    post:
+      summary: Create a new product
+      description: Creates a product and adds it to the list
+      requestBody:
+        description: Product data to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput'
+      responses:
+        '200':
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Validation error
+  /products/{id}:
+    put:
+      summary: Update a product
+      description: Updates the details of an existing product
+      parameters:
+        - name: id
+          in: path
+          description: ID of the product to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Updated product data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput'
+      responses:
+        '200':
+          description: Product updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Validation error
+        '404':
+          description: Product not found
+    delete:
+      summary: Delete a product
+      description: Deletes a product by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the product to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Product deleted successfully
+        '404':
+          description: Product not found
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Product A"
+        price:
+          type: number
+          format: double
+          example: 15.99
+        category:
+          type: string
+          example: "Electronics"
+        description:
+          type: string
+          example: "High-quality product"
+    ProductInput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Product A"
+        price:
+          type: number
+          format: double
+          example: 15.99
+        category:
+          type: string
+          example: "Electronics"
+        description:
+          type: string
+          example: "High-quality product"
+      required:
+        - name
+        - price
